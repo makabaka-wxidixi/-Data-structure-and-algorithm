@@ -1,8 +1,5 @@
 package binaryTree;
 
-import com.sun.source.tree.Tree;
-
-import java.util.Scanner;
 
 /**
  * @Author mkbk
@@ -35,18 +32,22 @@ public class binaryTreeOrderDemo {
         System.out.println("=====================");
         System.out.println(tree.posOrderSearch(5));
         System.out.println("=====================");
+        tree.deleteNode(3);
+        tree.preOrder();
+        System.out.println("=====================");
+
     }
 }
 
 class BinaryTree {
     private TreeNode root;
 
-    public void setRoot(TreeNode root) {
+    void setRoot(TreeNode root) {
         this.root = root;
     }
 
 
-    public void preOrder() {
+    void preOrder() {
         if (this.root == null) {
             System.out.println("当前二叉树为空，无法遍历-------1");
         } else {
@@ -54,7 +55,7 @@ class BinaryTree {
         }
     }
 
-    public void midOrder() {
+    void midOrder() {
         if (this.root == null) {
             System.out.println("当前二叉树为空，无法遍历------2");
         } else {
@@ -62,7 +63,7 @@ class BinaryTree {
         }
     }
 
-    public void posOrder() {
+    void posOrder() {
         if (this.root == null) {
             System.out.println("当前二叉树为空，无法遍历------3");
         } else {
@@ -71,7 +72,7 @@ class BinaryTree {
     }
 
     //前序搜索
-    public TreeNode preOrderSearch(int id) {
+    TreeNode preOrderSearch(int id) {
         if (!isEmpty()) {
             return this.root.preOrderSearch(id);
         } else {
@@ -81,7 +82,7 @@ class BinaryTree {
     }
 
     //中序遍历
-    public TreeNode midOrderSearch(int id) {
+    TreeNode midOrderSearch(int id) {
         if (!isEmpty()) {
             return this.root.midOrderSearch(id);
         } else {
@@ -91,7 +92,7 @@ class BinaryTree {
     }
 
     //后序遍历
-    public TreeNode posOrderSearch(int id) {
+    TreeNode posOrderSearch(int id) {
         if (!isEmpty()) {
             return this.root.posOrderSearch(id);
         } else {
@@ -100,7 +101,21 @@ class BinaryTree {
         }
     }
 
-    public boolean isEmpty() {
+    //删除结点
+    void deleteNode(int id) {
+        if (isEmpty()) {
+            System.out.println("数为空，无法删除");
+        } else {
+            if (this.root.id == id) {
+                root = null;
+                return;
+            }
+            this.root.deleteNode(id);
+            System.out.println("删除成功");
+        }
+    }
+
+    boolean isEmpty() {
         if (root == null) {
             return true;
         }
@@ -109,12 +124,12 @@ class BinaryTree {
 }
 
 class TreeNode {
-    private int id;
+    int id;
     private String name;
     TreeNode left;
     TreeNode right;
 
-    public TreeNode(int id, String name) {
+    TreeNode(int id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -128,7 +143,7 @@ class TreeNode {
     }
 
     //前序遍历
-    public void preOrder() {
+    void preOrder() {
         //打印该结点信息
         System.out.println(this);
         if (this.left != null) {
@@ -140,7 +155,7 @@ class TreeNode {
     }
 
     //中序遍历
-    public void midOrder() {
+    void midOrder() {
         if (this.left != null) {
             this.left.midOrder();
         }
@@ -151,7 +166,7 @@ class TreeNode {
     }
 
     //后序遍历
-    public void posOrder() {
+    void posOrder() {
         if (this.left != null) {
             this.left.posOrder();
         }
@@ -162,7 +177,7 @@ class TreeNode {
     }
 
     //前序搜索
-    public TreeNode preOrderSearch(int id) {
+    TreeNode preOrderSearch(int id) {
         System.out.println("前序遍历");
         if (this.id == id) {
             return this;
@@ -181,7 +196,7 @@ class TreeNode {
     }
 
     //中序遍历
-    public TreeNode midOrderSearch(int id) {
+    TreeNode midOrderSearch(int id) {
         TreeNode temp = null;
         if (this.left != null) {
             temp = this.left.midOrderSearch(id);
@@ -200,7 +215,7 @@ class TreeNode {
     }
 
     //后序遍历
-    public TreeNode posOrderSearch(int id) {
+    TreeNode posOrderSearch(int id) {
         TreeNode temp = null;
         //左不为空，向左递归
         if (this.left != null) {
@@ -219,7 +234,26 @@ class TreeNode {
         if (this.id == id) {
             return this;
         }
-        return temp;
+        return null;
+    }
+
+    //删除结点
+    void deleteNode(int id) {
+        //左节点不等于null，并且左节点是要找的就置空
+        if (this.left != null && this.left.id == id) {
+            this.left = null;
+            return;
+        }
+        if (this.right != null && this.right.id == id) {
+            this.right = null;
+            return;
+        }
+        if (this.left != null) {
+            this.left.deleteNode(id);
+        }
+        if (this.right != null) {
+            this.right.deleteNode(id);
+        }
     }
 }
 
