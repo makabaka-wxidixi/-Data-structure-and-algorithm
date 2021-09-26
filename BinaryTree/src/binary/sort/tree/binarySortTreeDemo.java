@@ -192,7 +192,7 @@ class Node {
     }
 
     /**
-     * 查找要删除的结点的父节点
+     * 查找目标结点的父节点
      *
      * @param value 要查找的结点的内容
      * @return 找到返回结点，找不到就返回null
@@ -222,10 +222,10 @@ class Node {
     }
 
     /**
-     * 找到要删除的结点
+     * 查找目标结点
      *
-     * @param value 要删除的结点内容
-     * @return 返回要删除的节点
+     * @param value 要查找的结点的内容
+     * @return 返回要查找的节点，找不到就返回null
      */
     Node searchNode(int value) {
         if (this.value == value) {
