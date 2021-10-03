@@ -2,6 +2,7 @@ package graph_demo;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 /**
  * @Author mkbk
@@ -27,13 +28,54 @@ public class graph {
         g.insertEdges(1, 2, 1);
         g.insertEdges(3, 4, 1);
         g.printGraph();
-        g.dfs();
+//        g.dfs();
+        g.bfs();
     }
 
     public graph(int n) {
         edges = new int[n][n];
         vertexList = new ArrayList<>(n);
         isVisited = new boolean[n];
+    }
+
+    /**
+     * 广度优先遍历
+     */
+    public void bfs() {
+        for (int i = 0; i < vertexList.size(); i++) {
+            if (!isVisited[i]) {
+                bfs(isVisited, i);
+            }
+        }
+    }
+
+    /**
+     * 广度优先遍历
+     *
+     * @param isVisited 判断结点是否访问
+     * @param row       行号
+     */
+    public void bfs(boolean[] isVisited, int row) {
+        int queueHeadIndex = 0;
+        int neighborVertex = 0;
+        LinkedList queue = new LinkedList();
+        System.out.print(getVertexByIndex(row) + "-->");
+        isVisited[row] = true;
+        queue.addLast(row);
+        while (!queue.isEmpty()) {
+            queueHeadIndex = (Integer) queue.removeFirst();
+            neighborVertex = getFirstNeighbor(row);
+            while (neighborVertex != -1) {
+                if (!isVisited[neighborVertex]) {
+                    System.out.print(getVertexByIndex(neighborVertex) + "-->");
+                    isVisited[neighborVertex] = true;
+                    queue.addLast(neighborVertex);
+                }
+                neighborVertex = getNextNeighbor(row, neighborVertex);
+            }
+        }
+
+
     }
 
     /**
