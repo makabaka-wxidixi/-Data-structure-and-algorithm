@@ -14,12 +14,10 @@ import java.util.Date;
  * 平均时间复杂度：n^2
  * 额外空间：O(1)
  * 稳定：关键词相同的数据元素将保持原有位置不变，所以该算法是稳定的
- *
- *
  */
 public class insertSort {
 
-    private static final int CAPACITY = 10000;
+    private static final int CAPACITY = 80000;
 
     public static void main(String[] args) {
         //数组的创建
@@ -44,7 +42,7 @@ public class insertSort {
             insertIndex = i;
             insertVal = arr[i];
             //当要插入的数据比有序表的数据小
-            while (insertIndex > 0 && insertVal < arr[insertIndex - 1]) {
+            while (insertIndex - 1 >= 0 && insertVal < arr[insertIndex - 1]) {
                 //将有序表中做比较的数据往后移一位
                 arr[insertIndex] = arr[insertIndex - 1];
                 //要查入的位置前移一位
@@ -74,3 +72,4 @@ public class insertSort {
         System.out.println(arr[i]);
     }
 }
+ 
