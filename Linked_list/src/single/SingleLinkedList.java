@@ -122,6 +122,72 @@ public class SingleLinkedList {
         //curr为null的时候都没有返回，就说明没有要找的结点
         return null;
     }
+
+    /**
+     * 链表向右旋转
+     *
+     * @param step 向右旋转的步数
+     */
+    public void rightRotate(int step) {
+        if (isEmpty() || head.next.next == null)//链表为空或者只有一个结点
+            return;
+        Node Head = head.next, curr = Head;
+        int len = 0;//链表长度
+        while (curr != null) {
+            ++len;
+            curr = curr.next;
+        }
+        step %= len;//右移的步数
+        if (step == 0) {//说明不用移动链表
+            return;
+        }
+        curr = Head;
+        for (int i = 1; i < len - step; i++) {
+            curr = curr.next;
+        }
+        //curr指向新的尾部
+        Node newNode = curr.next;//新的头结点
+        curr.next = null;//新的尾结点后继节点置为null
+        curr = newNode;//找到链表最后的节点，再将该节点连到原始头结点上
+        while (curr.next != null) {
+            curr = curr.next;
+        }
+        curr.next = Head;//链表最后的结点指向头结点
+        head.next = newNode;
+    }
+
+    /**
+     * 链表向左旋转
+     *
+     * @param step 左旋转的步数
+     */
+    public void leftRotate(int step) {
+        if (isEmpty() || head.next.next == null) //链表为空或者只有一个结点
+            return;
+        int len = 0;
+        Node Head = head.next, curr = Head;
+        while (curr != null) {
+            ++len;
+            curr = curr.next;
+        }
+        step %= len;
+        if (step == 0)
+            return;
+        curr = Head;
+        for (int i = 1; i < step; i++) {
+            curr = curr.next;
+        }
+        //curr指向新链表的尾结点，curr的后继节点就是新的首元结点
+        Node newHead = curr.next;//新的首元结点
+        curr.next = null;//尾结点next域置空
+        curr = newHead;
+        while (curr.next != null) {
+            curr = curr.next;
+        }
+        curr.next = Head;
+        head.next = newHead;
+    }
+
 }
 
 
