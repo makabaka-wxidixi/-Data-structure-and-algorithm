@@ -11,13 +11,6 @@ public class OrderList {
     ListNode head = null;
     ListNode tail = head;
 
-    public static void main(String[] args) {
-        OrderList list = new OrderList();
-        list.insertByRear(new int[]{4, 2, 1, 3});
-        list.sortList(list.head);
-        list.list();
-
-    }
 
     public void list() {
         ListNode curr = head;
@@ -74,26 +67,21 @@ public class OrderList {
      */
     public ListNode sortList(ListNode Head) {
         if (Head == null || Head.next == null)
-            return null;
+            return Head;
         List<ListNode> list = new ArrayList<>();
         ListNode curr = Head;
         while (curr != null) {//将链表放入到一个集合中
             list.add(curr);
             curr = curr.next;
         }
-        Collections.sort(list, new Comparator() {
+        Collections.sort(list, new Comparator<ListNode>() {
             @Override
-            public int compare(Object o1, Object o2) {
-                ListNode l1 = (ListNode) o1;
-                ListNode l2 = (ListNode) o2;
-                return l2.val - l1.val;
+            public int compare(ListNode o1, ListNode o2) {
+                return o2.val - o1.val;
             }
         });
-        Head = list.get(0);
-        curr = Head;
-        for (int i = 1; i < list.size() - 1; i++) {
-            curr.next = list.get(i);
-            curr = curr.next;
+        for (int i = 0; i < list.size() - 1; i++) {
+            list.get(i).next = list.get(i + 1);
         }
         list.get(list.size() - 1).next = null;
         return Head;
