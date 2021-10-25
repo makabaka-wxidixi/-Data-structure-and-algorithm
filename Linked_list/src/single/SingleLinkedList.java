@@ -7,8 +7,9 @@ package single;
  * @Create 2021-10-20 19:28
  */
 public class SingleLinkedList {
-    Node head = new Node(Integer.MIN_VALUE);//头结点
+    Node head = null;//头结点
     Node tailNode = head;//用于记录尾部结点，便于尾插法
+    int numOfNode = 0;
 
     //内部节点类
     public class Node {
@@ -32,24 +33,28 @@ public class SingleLinkedList {
         //要插入的结点
         Node newNode = new Node(val);
         if (isEmpty()) {//如果是链表为空，直接用头结点连接
-            head.next = newNode;
+            head = newNode;//头结点
             tailNode = newNode;//指向尾部结点
+            numOfNode++;
             return;
         }
-        newNode.next = head.next;
-        head.next = newNode;
+        newNode.next = head;
+        head = newNode;
+        numOfNode++;
     }
 
     //增(尾插法)
     public void addFromTail(int val) {
         Node newNode = new Node(val);
         if (isEmpty()) {//如果为空，那就直接用head连接
-            head.next = newNode;
+            head = newNode;//头结点
             tailNode = newNode;//跟踪尾结点
+            numOfNode++;
             return;
         }
         tailNode.next = newNode;//尾结点连接
         tailNode = newNode;//更新尾结点
+        numOfNode++;
     }
 
     //删
@@ -62,6 +67,7 @@ public class SingleLinkedList {
         if (rear.next == tailNode)//要删除的结点如果是尾结点，那么就需要更新尾结点
             tailNode = rear;
         rear.next = rear.next.next;//前驱结点直接指向后继节点
+        numOfNode--;
         delete(val);//递归删除重复结点
     }
 
@@ -92,7 +98,9 @@ public class SingleLinkedList {
 
     //遍历
     public void orderList() {
-        Node curr = head.next;
+        if (head == null)
+            return;
+        Node curr = head;
         while (curr != null) {
             System.out.print(curr.toString());
             curr = curr.next;
@@ -101,9 +109,40 @@ public class SingleLinkedList {
 
     //判断链表是否为空
     public boolean isEmpty() {
-        if (head.next == null)
+        if (head == null)
             return true;
         return false;
+    }
+
+    //查找指定位置的结点
+    public Node getNodeByIndex(int index) {
+        if (isEmpty() || index + 1 > numOfNode)//链表为空
+            return null;
+        Node curr = head;
+        for (int i = 0; i < index; i++) {
+            curr = curr.next;
+        }
+        return curr;
+    }
+
+    //返回链表长度
+    public int size() {
+        return numOfNode;
+    }
+
+    //反转链表
+    public void reversalList(Node head) {
+        if (head == null || head.next == null)
+            return ;
+        Node rear = null, curr = head, tail = curr.next;
+        while (tail != null) {
+            curr.next = rear;
+            rear = curr;
+            curr = tail;
+            tail = tail.next;
+        }
+        curr.next = rear;
+        this.head = curr;
     }
 
     /**
@@ -114,8 +153,8 @@ public class SingleLinkedList {
      */
     public Node contains(int val) {
         Node curr = head;//指向头结点
-        while (curr.next != null) {//curr只要不为null，就循环寻找
-            if (curr.next.val == val)
+        while (curr != null) {//curr只要不为null，就循环寻找
+            if (curr.val == val)
                 return curr;
             curr = curr.next;
         }
@@ -129,9 +168,9 @@ public class SingleLinkedList {
      * @param step 向右旋转的步数
      */
     public void rightRotate(int step) {
-        if (isEmpty() || head.next.next == null)//链表为空或者只有一个结点
+        if (isEmpty() || head.next == null)//链表为空或者只有一个结点
             return;
-        Node Head = head.next, curr = Head;
+        Node Head = head, curr = Head;
         int len = 0;//链表长度
         while (curr != null) {
             ++len;
@@ -153,7 +192,7 @@ public class SingleLinkedList {
             curr = curr.next;
         }
         curr.next = Head;//链表最后的结点指向头结点
-        head.next = newNode;
+        head = newNode;
     }
 
     /**
@@ -162,10 +201,10 @@ public class SingleLinkedList {
      * @param step 左旋转的步数
      */
     public void leftRotate(int step) {
-        if (isEmpty() || head.next.next == null) //链表为空或者只有一个结点
+        if (isEmpty() || head.next == null) //链表为空或者只有一个结点
             return;
         int len = 0;
-        Node Head = head.next, curr = Head;
+        Node Head = head, curr = Head;
         while (curr != null) {
             ++len;
             curr = curr.next;
@@ -185,7 +224,7 @@ public class SingleLinkedList {
             curr = curr.next;
         }
         curr.next = Head;
-        head.next = newHead;
+        head = newHead;
     }
 
 }
