@@ -49,14 +49,44 @@ public class PalindromeList {
     }
 
     /**
+     * 判断链表是否回文
+     * 方式二：利用递归，左指针指针指向链表头部，右指针递归找到链表尾部。然后回溯判断回文
+     * 时间复杂度：On
+     * 空间复杂度：On由于用到递归，会使用堆栈帧
+     * @param head 传入的链表头部
+     * @return 是回文返回true，否则返回false
+     */
+    public boolean isPalindrome2(Node head) {
+        leftPointer = head  ;
+        return recursion(head.next);
+    }
+
+    private Node leftPointer;
+
+    private boolean recursion(Node rightPointer) {
+        if (rightPointer != null) {//递归找到链表尾部
+            if (!recursion(rightPointer.next)) {//如果后面的结点不匹配，就直接返回false
+                return false;
+            }
+            if (rightPointer.val != leftPointer.val) {//内容不匹配就返回false
+                return false;
+            }
+            leftPointer = leftPointer.next;//左指针配合右指针（回溯移动）右移
+        }
+        return true;
+    }
+
+
+    /**
      * 判断是否回文
      * 方式一：将链表存入集合中，用左右指针来扫描判断
      * 时间复杂度：On
      * 空间复杂度：On
+     *
      * @param head
      * @return
      */
-    public boolean isPalindrome(Node head) {
+    public boolean isPalindrome1(Node head) {
         if (head == null) {
             return false;
         }
