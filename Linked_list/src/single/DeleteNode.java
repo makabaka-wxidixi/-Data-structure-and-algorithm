@@ -70,10 +70,12 @@ public class DeleteNode {
 
     public static void main(String[] args) {
         DeleteNode list = new DeleteNode();
-        for (int i = 0; i < 10; i++) {
-            list.insertByHead(i);
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 3; j++) {
+                list.insertByHead(i);
+            }
         }
-        Node node = list.removeNthFromEnd4(list.head, 10);
+        Node node = list.deleteDuplicate2(list.head);
         list.list(node);
     }
 
@@ -89,15 +91,14 @@ public class DeleteNode {
      * @return 返回删除之后的链表头结点
      */
     public Node removeNthFromEnd(Node head, int n) {
-        Node dummy = new Node();
-        dummy.next = head;
-        int length = getLength(head);
-        Node cur = dummy;
+        Node hair = new Node(-1, head);
+        int length = getLength(head);//链表长度
+        Node prev = hair;//要删除结点的前驱结点
         for (int i = 1; i < length - n + 1; ++i) {
-            cur = cur.next;
+            prev = prev.next;
         }
-        cur.next = cur.next.next;
-        return dummy.next;
+        prev.next = prev.next.next;
+        return hair.next;
     }
 
     public int getLength(Node head) {
@@ -184,4 +185,95 @@ public class DeleteNode {
             head.next = head.next.next;//head就是倒数第j个结点的前驱结点
         }
     }
+
+    //**************************************删除重复结点1.0*******************************************
+
+    /**
+     * 方式一：双指针
+     * 删除重复结点，使所有节点只出现一次
+     *
+     * @param head 链表头结点
+     * @return 返回修改后的链表
+     */
+    public Node deleteDuplicate(Node head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        Node left = head, right = left.next;
+        while (right != null) {
+            if (left.val == right.val) {//两个结点内容相同
+                if (right.next == null) {//最后一个结点
+                    left.next = null;
+                }
+                right = right.next;
+            } else {
+                left.next = right;
+                left = right;
+                right = right.next;
+            }
+        }
+        return head;
+    }
+
+    /**
+     * 方式二：单指针
+     * 时间复杂度：On
+     * 空间复杂度：O1
+     *
+     * @param head 链表头结点
+     * @return 放回修改后的头结点
+     */
+    public Node deleteDuplicate2(Node head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        Node curr = head;
+        while (curr.next != null) {
+            if (curr.val == curr.next.val) {
+                curr.next = curr.next.next;
+            } else {
+                curr = curr.next;
+            }
+        }
+        return head;
+    }
+
+    //**************************************删除重复结点2.0*******************************************
+
+    /**
+     * 方式一：三个指针，一次遍历
+     * 时间复杂度：On（链表长度）
+     * 空间复杂度：O1
+     *
+     * @param head 链表头结点
+     * @return 返回删除之后的链表头结点
+     */
+    public Node deleteDuplicates(Node head) {
+        if (head == null || head.next == null) {//链表为空或者只有一个结点
+            return head;
+        }
+        Node hair = new Node(-1, head);
+        Node prev = hair, curr = head, rear = head.next;
+        while (rear != null) {
+            while (rear != null && curr.val == rear.val) {//外层循环是考虑到可能有多组相同的结点挨在一起，例如3.3.4.4.5.5
+                while (rear != null && curr.val == rear.val) {
+                    rear = rear.next;
+                }
+                if (rear == null) {//说明curr到rear都是相同的，此时已经到达链表尾部
+                    prev.next = null;
+                    return hair.next;//head可能会被删除，后续可能还有结点，所以返回形式为hair.next
+                }
+                curr = rear;
+                rear = rear.next;
+            }
+            prev.next = curr;
+            prev = curr;
+            curr = rear;
+            if (rear != null) {
+                rear = rear.next;
+            }
+        }
+        return hair.next;//为什么不返回head？因为head有可能会被删除，此时如果再返回head，那么链表就丢失了。应该返回hair.next
+    }
+
 }
