@@ -1,5 +1,7 @@
 package single;
 
+import java.util.HashMap;
+import java.util.Scanner;
 import java.util.Stack;
 
 /**
@@ -70,12 +72,12 @@ public class DeleteNode {
 
     public static void main(String[] args) {
         DeleteNode list = new DeleteNode();
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = -3; i < 5; i++) {
+            for (int j = 0; j < 1; j++) {
                 list.insertByHead(i);
             }
         }
-        Node node = list.deleteDuplicate2(list.head);
+        Node node = list.deleteZeroSumSublist(list.head);
         list.list(node);
     }
 
@@ -274,6 +276,83 @@ public class DeleteNode {
             }
         }
         return hair.next;//为什么不返回head？因为head有可能会被删除，此时如果再返回head，那么链表就丢失了。应该返回hair.next
+    }
+
+    //**************************************删除指定结点*******************************************
+
+    /**
+     * 方法一：递归
+     * 时间复杂度：On
+     * 空间复杂度：On（栈帧）
+     *
+     * @param head 链表头结点
+     * @param val  目标值
+     * @return 返回修改后的链表头结点
+     */
+    public Node deleteElements(Node head, int val) {
+        if (head == null) {
+            return null;
+        }
+        head.next = deleteElements(head.next, val);
+        return head.val == val ? head.next : head;
+    }
+
+    /**
+     * 方式二：迭代
+     * 时间复杂度：On
+     * 空间复杂度：O1
+     *
+     * @param head 链表头结点
+     * @param val  目标值
+     * @return 返回修改后的链表的头结点
+     */
+    public Node deleteElements2(Node head, int val) {
+        if (head == null) {
+            return null;
+        }
+        Node hair = new Node(val, head);//虚拟头结点
+        Node prev = hair, curr = head;
+        while (curr != null) {
+            if (curr.val == val) {//如果当前节点符合条件
+                curr = curr.next;
+                prev.next = curr;
+            } else {
+                prev = curr;
+                curr = curr.next;
+            }
+        }
+        return hair.next;
+    }
+
+    //**************************************删除和为0的连续结点*******************************************
+
+    /**
+     * 方式一：HashMap
+     * 时间复杂度：On
+     * 空间复杂度：On
+     *
+     * @param head 链表头结点
+     * @return 修改之后的链表头结点
+     */
+    public Node deleteZeroSumSublist(Node head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        Node hair = new Node(0, head);
+        HashMap<Integer, Node> map = new HashMap<>();
+        int sum = 0;
+        //第一次遍历，将所有结点以及sum值录入
+        for (Node curr = hair; curr != null; curr = curr.next) {
+            sum += curr.val;//前面结点之和
+            map.put(sum, curr);
+        }
+        sum = 0;
+        //如果两个sum值相等，那么就说明两个节点之间的节点和为0
+        for (Node curr = hair; curr != null; curr = curr.next) {
+            sum += curr.val;
+            curr.next = map.get(sum).next;//指向最后一个相同节点的下一个节点，中间的结点和为0
+        }
+        return hair.next;
     }
 
 }
