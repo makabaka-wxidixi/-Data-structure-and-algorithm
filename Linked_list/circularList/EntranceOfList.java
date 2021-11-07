@@ -82,7 +82,7 @@ public class EntranceOfList {
             curr = curr.next;
         }
         list.tail.next = curr;
-        Node node = list.DetectCircle(list.head);
+        Node node = list.DetectCircle2(list.head);
         System.out.println(node);
     }
 
@@ -110,6 +110,34 @@ public class EntranceOfList {
                 set.add(curr);
             }
             curr = curr.next;
+        }
+        return null;
+    }
+
+    /**
+     * 方式一：快慢指针
+     * 时间复杂度：On
+     * 空间复杂度：O1
+     *
+     * @param head 输入的链表
+     * @return 返回修改后的链表
+     */
+    public Node DetectCircle2(Node head) {
+        if (head == null) {
+            return null;
+        }
+        Node slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+            if (fast == slow) {
+                Node ptr = head;
+                while (ptr != slow) {
+                    ptr = ptr.next;
+                    slow = slow.next;
+                }
+                return slow;
+            }
         }
         return null;
     }
