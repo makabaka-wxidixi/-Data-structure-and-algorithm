@@ -2,6 +2,7 @@ package single;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 /**
  * @Author mkbk
@@ -53,11 +54,12 @@ public class PalindromeList {
      * 方式二：利用递归，左指针指针指向链表头部，右指针递归找到链表尾部。然后回溯判断回文
      * 时间复杂度：On
      * 空间复杂度：On由于用到递归，会使用堆栈帧
+     *
      * @param head 传入的链表头部
      * @return 是回文返回true，否则返回false
      */
     public boolean isPalindrome2(Node head) {
-        leftPointer = head  ;
+        leftPointer = head;
         return recursion(head.next);
     }
 
@@ -83,8 +85,8 @@ public class PalindromeList {
      * 时间复杂度：On
      * 空间复杂度：On
      *
-     * @param head
-     * @return
+     * @param head 传入的链表头部
+     * @return 是回文返回true，否则返回false
      */
     public boolean isPalindrome1(Node head) {
         if (head == null) {
@@ -107,4 +109,109 @@ public class PalindromeList {
         return true;
     }
 
+    /**
+     * 方式三：栈：链表前半段入栈，和后半段比较
+     * 时间复杂度：On
+     * 空间复杂度：On
+     *
+     * @param head 传入的链表头部
+     * @return 是回文返回true，否则返回false
+     */
+    public boolean isPalindrome3(Node head) {
+        Stack<Integer> stack = new Stack<>();
+        Node slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            stack.push(slow.val);
+            slow = slow.next;
+            fast = fast.next.next;
+        }
+        Node newHead;
+        int max = stack.size();
+        if (fast.next == null) {//结点个数为奇数
+            newHead = slow.next;
+            for (int i = 0; i < max; i++) {
+                if (stack.peek() == newHead.val) {
+                    stack.pop();
+                    newHead = newHead.next;
+                } else {
+                    return false;
+                }
+            }
+        } else {//偶数
+            stack.push(slow.val);
+            newHead = slow.next;
+            for (int i = 0; i < max + 1; i++) {
+                if (stack.peek() == newHead.val) {
+                    stack.pop();
+                    newHead = newHead.next;
+                } else {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 方式四：反转链表
+     * 时间复杂度：On
+     * 空间复杂度：O1
+     *
+     * @param head 传入的链表头部
+     * @return 是回文返回true，否则返回false
+     */
+    public boolean isPalindrom4(Node head) {
+        Node slow = head, fast = head;
+        while (fast.next != null && fast.next.next != null) {
+            fast = fast.next.next;
+            slow = slow.next;
+        }
+        Node curr = head, Rcurr, Rhead;
+        if (fast.next == null) {//结点是奇数
+            Rhead = reverse(slow.next);
+            Rcurr = Rhead;
+            while (Rcurr != null) {
+                if (curr.val != Rcurr.val) {
+                    Rhead = reverse(Rhead);
+                    slow.next = Rhead;
+                    return false;
+                } else {
+                    curr = curr.next;
+                    Rcurr = Rcurr.next;
+                }
+            }
+        } else {//结点是偶数
+            Rhead = reverse(slow.next);
+            Rcurr = Rhead;
+            while (Rcurr != null) {
+                if (curr.val != Rcurr.val) {
+                    Rhead = reverse(Rhead);
+                    slow.next = Rhead;
+                    return false;
+                } else {
+                    curr = curr.next;
+                    Rcurr = Rcurr.next;
+                }
+            }
+        }
+        Rhead = reverse(Rhead);
+        slow.next = Rhead;
+        return true;
+    }
+
+    //翻转链表
+    private Node reverse(Node head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        Node prev = null, curr = head, rear = head.next;
+        while (rear != null) {
+            curr.next = prev;
+            prev = curr;
+            curr = rear;
+            rear = rear.next;
+        }
+        curr.next = prev;
+        return curr;
+    }
 }
