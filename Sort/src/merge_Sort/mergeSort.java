@@ -19,7 +19,7 @@ import java.util.Date;
  */
 public class mergeSort {
 
-    private static int CAPACITY = 8;
+    private static int CAPACITY = 800;
 
     public static void main(String[] args) {
         //数组的创建
@@ -51,7 +51,7 @@ public class mergeSort {
             return;
         }
         int len = arr.length;//得到数组的长度
-        for (int i = 1; i < len; i++) {//分组大小，1,2,4,8,16...直至最后整个数组是一个分组，此时也就排好序了
+        for (int i = 1; i < len; i *= 2) {//分组大小，1,2,4,8,16...直至最后整个数组是一个分组，此时也就排好序了
             int left = 0;
             int mid = left + i - 1;
             int right = mid + i;
@@ -67,7 +67,7 @@ public class mergeSort {
             mid+1是后面分组的最小下标
             当数组的最大下标（len-1）小于等于mid时就不用组合排序
              */
-            if (mid < len) {
+            if (mid < len - 1) {
                 merge_sort(arr, left, mid, len - 1, temp);
             }
         }
@@ -95,11 +95,11 @@ public class mergeSort {
     }
 
     /**
-     * @param arr 排序数组
-     * @param left 最左坐标
-     * @param mid 中间坐标
+     * @param arr   排序数组
+     * @param left  最左坐标
+     * @param mid   中间坐标
      * @param right 最右坐标
-     * @param temp 辅助数组
+     * @param temp  辅助数组
      */
     private static void merge_sort(int[] arr, int left, int mid, int right, int[] temp) {
         int l = left;//记录左侧数组的最左边
