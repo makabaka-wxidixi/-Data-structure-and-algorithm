@@ -88,7 +88,7 @@ public class Demo1 {
     }
 
 
-    //***************************************单调找（三）*******************************************
+    //***************************************单调栈（三）*******************************************
     /*
     利用差值，实现最优解
     时间复杂度：O1
@@ -124,6 +124,56 @@ public class Demo1 {
 
         public int getMin() {
             return (int) min;
+        }
+    }
+
+    //***************************************单调栈（四）*******************************************
+    /*
+    利用位运算
+    时间复杂度：O1
+    空间复杂度：On（用的是long）8个字节
+     */
+    class MinStack4 {
+        Stack<Long> stack = new Stack<>();
+        long ele;
+        int min;
+        long temp = ~(-1L << 32);
+
+        public MinStack4() {
+        }
+
+        public void push(int val) {
+            if (stack.isEmpty()) {
+                ele = val;
+                ele <<= 32;//数据放到前32位
+                ele |= (long) val & temp;//最小值放到后32位
+                stack.push(ele);
+            } else {
+                min = stack.peek().intValue();//和栈顶元素的最小值作比较
+                if (val < min) {//需要更新最小值
+                    ele = val;
+                    ele <<= 32;
+                    ele |= (long) val & temp;
+                    stack.push(ele);
+                } else {
+                    ele = val;
+                    ele <<= 32;
+                    ele |= (long) min & temp;
+                    stack.push(ele);
+                }
+            }
+        }
+
+        public void pop() {
+            stack.pop();
+        }
+
+        public int top() {
+            return (int) (stack.peek() >> 32);
+        }
+
+        public int getMin() {
+            return stack.peek().intValue();
         }
     }
 
